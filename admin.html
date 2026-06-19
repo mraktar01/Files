@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · Aktar's Directory</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components/toast.css" />
+</head>
+<body>
+
+  <!-- ── Login Screen ─────────────────────────────────────── -->
+  <div id="loginScreen" class="login-screen" style="display:none;">
+    <div class="login-card glass">
+      <h1>Admin Login</h1>
+      <p>Enter your credentials to manage the directory.</p>
+
+      <form id="loginForm" method="dialog" autocomplete="on">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            class="form-control"
+            type="text"
+            id="username"
+            name="username"
+            placeholder="your username"
+            autocomplete="username"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            class="form-control"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+        <div style="height:0.5rem;"></div>
+        <button type="submit" class="btn btn-primary" id="loginBtn">Log In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Dashboard ────────────────────────────────────────── -->
+  <div id="dashboardLayout" class="admin-layout">
+
+    <div class="admin-header">
+      <h1>Directory Admin</h1>
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <div class="session-bar">
+          <span class="session-dot"></span>
+          <span id="sessionTimer">Session active</span>
+        </div>
+        <button class="btn btn-secondary" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+
+    <!-- Add File Card -->
+    <div class="admin-card glass">
+      <h2>Add New File</h2>
+      <form id="uploadForm" autocomplete="off">
+        <div class="form-group">
+          <label for="fileName">File Name</label>
+          <input
+            class="form-control"
+            type="text"
+            id="fileName"
+            name="fileName"
+            placeholder="e.g. Project Report Q1 2025.pdf"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="fileLink">Download Link</label>
+          <input
+            class="form-control"
+            type="url"
+            id="fileLink"
+            name="fileLink"
+            placeholder="https://drive.google.com/…"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fileSize">File Size <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+            <input
+              class="form-control"
+              type="text"
+              id="fileSize"
+              name="fileSize"
+              placeholder="e.g. 4.2 MB"
+            />
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <button type="submit" class="btn btn-primary" id="uploadBtn">Add File</button>
+      </form>
+    </div>
+
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/utils/toast.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
