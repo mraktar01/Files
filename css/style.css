@@ -29,10 +29,10 @@ body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
-  min-height: 100vh;
+  height: 100vh; /* Locked strictly to viewport height */
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow: hidden; /* Prevents whole-page double-scrollbar behavior */
 }
 
 /* ── Mesh background ───────────────────────────────────────── */
@@ -65,9 +65,23 @@ body::after {
 .wrapper {
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Forces wrapper to span exactly top-to-bottom of screen */
+  width: 100%;
+}
+
+/* Inner content stays constrained to a readable width;
+   footer (outside this) is free to span the full screen */
+.content-inner {
+  width: 100%;
   max-width: 860px;
   margin: 0 auto;
-  padding: 0 1.25rem 4rem;
+  padding: 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0; /* allow children to shrink so #fileList can scroll internally */
 }
 
 /* ── Glass card utility ────────────────────────────────────── */
@@ -186,7 +200,57 @@ body::after {
 }
 
 /* ── File List ─────────────────────────────────────────────── */
-#fileList { display: flex; flex-direction: column; gap: 0.55rem; }
+/* Prevent Header, Controls Bar, and Footer from squishing under low heights */
+.site-header,
+.controls-bar,
+.list-meta,
+.site-footer-bar {
+  flex-shrink: 0;
+}
+
+/* Isolated Scrollable Container */
+#fileList { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.55rem; 
+  flex: 1;            /* Grabs all remaining vertical space on screen */
+  min-height: 0;      /* Required so flex item can actually shrink + scroll internally */
+  overflow-y: auto;   /* Automatically adds scrollbar inside the card area if full */
+  padding-right: 4px; /* Tiny breathing room for a clean scrollbar appearance */
+  margin-bottom: 1rem;
+  
+  /* Smooth native-like momentum scrolling physics for iOS/Mobile touch interfaces */
+  -webkit-overflow-scrolling: touch; 
+}
+
+/* ── Custom Scrollbar: dark, square, auto-hide ───────────────── */
+/* WebKit (Chrome, Edge, Safari) */
+#fileList::-webkit-scrollbar {
+  width: 8px;
+}
+#fileList::-webkit-scrollbar-track {
+  background: transparent;
+}
+#fileList::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.08);
+  border-radius: 0;      /* square, not pill-shaped */
+  transition: background 0.2s;
+}
+#fileList:hover::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.22);
+}
+#fileList::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.32);
+}
+
+/* Firefox */
+#fileList {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent; /* hidden by default */
+}
+#fileList:hover {
+  scrollbar-color: rgba(255,255,255,0.22) transparent; /* appears on hover */
+}
 
 .file-card {
   display: flex;
@@ -202,6 +266,7 @@ body::after {
   color: inherit;
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .file-card::before {
@@ -542,11 +607,12 @@ body::after {
 .site-footer-bar {
   position: relative;
   z-index: 1;
-  margin-top: 3rem;
+  margin-top: auto; /* Always anchors safely at the foot of the layout column */
   border-top: 1px solid var(--border);
   background: rgba(255,255,255,0.02);
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
+  width: 100%;
 }
 
 .footer-inner {
