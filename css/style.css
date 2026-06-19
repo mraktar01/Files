@@ -29,7 +29,8 @@ body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
-  height: 100vh; /* Locked strictly to viewport height */
+  height: 100vh;
+  height: 100dvh; /* Locked strictly to viewport height */
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow: hidden; /* Prevents whole-page double-scrollbar behavior */
@@ -67,6 +68,7 @@ body::after {
   z-index: 1;
   display: flex;
   flex-direction: column;
+  height: 100vh;
   height: 100vh; /* Forces wrapper to span exactly top-to-bottom of screen */
   width: 100%;
 }
@@ -601,6 +603,13 @@ body::after {
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* Safe padding for modern mobile screen home indicator bars */
+  .site-footer-bar {
+    padding-bottom: cubic-bezier(0.4, 0, 0.2, 1);
+    padding-bottom: env(safe-area-inset-bottom, 1rem); 
+  }
 }
 
 /* ── Site Footer ───────────────────────────────────────────── */
